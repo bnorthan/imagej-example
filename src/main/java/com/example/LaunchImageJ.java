@@ -1,10 +1,12 @@
 package com.example;
 
 import net.imagej.ImageJ;
+import net.imglib2.FinalDimensions;
 import net.imglib2.RandomAccess;
 import net.imglib2.img.Img;
 import net.imglib2.type.NativeType;
 import net.imglib2.type.numeric.RealType;
+import net.imglib2.type.numeric.real.FloatType;
 
 public class LaunchImageJ {
 	public static <T extends RealType<T> & NativeType<T>> void main(final String[] args) {
@@ -20,11 +22,12 @@ public class LaunchImageJ {
 		final int ySize = 128;
 
 		// create a new image
-		final Img<T> img = (Img<T>) ij.op().create().img(new long[] { xSize, ySize });
+		final Img<FloatType> img = (Img<FloatType>) ij.op().create()
+				.img(new FinalDimensions(new long[] { xSize, ySize }), new FloatType());
 
 		// get a 'RandomAccess' object, this object allows access to pixels at
 		// specific locations
-		final RandomAccess<T> ra = img.randomAccess();
+		final RandomAccess<FloatType> ra = img.randomAccess();
 
 		// move to the middle of the image and set the pixel value there to 255
 		ra.setPosition(new long[] { xSize / 2, ySize / 2 });
