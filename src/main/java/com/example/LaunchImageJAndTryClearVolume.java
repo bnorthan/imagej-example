@@ -1,19 +1,27 @@
 package com.example;
 
+import java.nio.ByteBuffer;
+import java.util.ArrayList;
+import java.util.List;
+
 import clearvolume.renderer.ClearVolumeRendererInterface;
 import clearvolume.renderer.factory.ClearVolumeRendererFactory;
 import clearvolume.transferf.TransferFunctions;
+import coremem.enums.NativeTypeEnum;
+import de.mpicbg.jug.clearvolume.ImgLib2ClearVolume;
 import net.imagej.ImageJ;
 import net.imglib2.FinalDimensions;
 import net.imglib2.RandomAccess;
+import net.imglib2.RandomAccessibleInterval;
+import net.imglib2.algorithm.stats.Normalize;
 import net.imglib2.img.Img;
 import net.imglib2.type.NativeType;
 import net.imglib2.type.numeric.RealType;
 import net.imglib2.type.numeric.real.FloatType;
 
 
-public class LaunchImageJ {
-	public static <T extends RealType<T> & NativeType<T>> void main(final String[] args) {
+public class LaunchImageJAndTryClearVolume {
+	public static <T extends RealType<T> & NativeType<T>> void main(final String[] args) throws InterruptedException {
 
 		// create an instance of imagej
 		final ImageJ ij = new ImageJ();
@@ -44,12 +52,50 @@ public class LaunchImageJ {
 
 		// show the image
 		ij.ui().show(img);
+		
+		//clearVolumeExample();
+		
+		clearVolumeShowImg(img);
 
 	}
 	
-	static void clearVolumeExample() {
+	private static void clearVolumeShowImg(Img<FloatType> img) {
+		
+		final List< RandomAccessibleInterval< FloatType >> imgs =
+				new ArrayList< RandomAccessibleInterval< FloatType >>();
+		imgs.add( img );
+
+		final long toc = System.currentTimeMillis();
+		//System.out.println( String.format( " ...done in %d ms.", toc - tic ) );
+
+		Normalize.normalize( img, new FloatType( 0f ), new FloatType( 1f ) );
+		final ClearVolumeRendererInterface cv =
+				ImgLib2ClearVolume.initRealImgs(
+						imgs,
+						null,
+						"Img -> ClearVolume",
+						512, 512,
+						512, 512,
+						false,
+						new double[] { 0. },
+						new double[] { 1.0 },
+						true );
+		cv.setVoxelSize( 1., 1., 3.5 );
+		cv.requestDisplay();
+
+		while ( cv.isShowing() ) {
+			try {
+				Thread.sleep( 500 );
+			} catch ( final InterruptedException e ) {
+				e.printStackTrace();
+			}
+		}
+		cv.close();
+	}
+	
+	static void clearVolumeExample() throws InterruptedException {
 		// obtain the best renderer, this usually means picking the best supported GPU programming framwork such as CUDA or OpenCL or GLSL on the most performant GPU installed.
-		final ClearVolumeRendererInterface lClearVolumeRenderer = ClearVolumeRendererFactory.newBestRenderer("ClearVolumeTest",768,768,NativeTypeEnum.UnsignedShort,768,768,2);
+		final ClearVolumeRendererInterface lClearVolumeRenderer = ClearVolumeRendererFactory.newBestRenderer("ClearVolumeTest",768,768,NativeTypeEnum.UnsignedShort,768,768,true);
 
 		// Different transfer functions can be used:
 		lClearVolumeRenderer.setTransferFunction(TransferFunctions.getGrayLevel());
@@ -75,9 +121,10 @@ public class LaunchImageJ {
 					lVolumeDataArray[lIndex + 1] = (byte) (((byte) x ^ (byte) y ^ (byte) z));
 				}
 
+		lClearVolumeRenderer.setVisible(true);
 				
 		// sets the current buffer to be displayed:
-		lClearVolumeRenderer.setVolumeDataBuffer(ByteBuffer.wrap(lVolumeDataArray), lResolutionX, lResolutionY, lResolutionZ);
+		lClearVolumeRenderer.setVolumeDataBuffer(0, ByteBuffer.wrap(lVolumeDataArray), lResolutionX, lResolutionY, lResolutionZ);
 
 		// Waits for the renderer's window to be closed:
 		while (lClearVolumeRenderer.isShowing())
@@ -88,6 +135,6 @@ public class LaunchImageJ {
 		// closes the renderer and release all ressources:
 		lClearVolumeRenderer.close();
 
-		}
+		
 	}
 }
