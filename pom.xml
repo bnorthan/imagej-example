@@ -72,6 +72,12 @@
 			<groupId>net.imagej</groupId>
 			<artifactId>imagej-legacy</artifactId>
 		</dependency>
+		
+		<dependency>
+			<groupId>net.imagej</groupId>
+			<artifactId>imagej-ops</artifactId>
+			<version>0.38.1-SNAPSHOT</version>
+		</dependency>
 	
 		<!-- Imglib2 dependencies -->
 		<dependency>
