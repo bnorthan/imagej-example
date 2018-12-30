@@ -38,7 +38,8 @@
 						<phase>none</phase>
 					</execution>
 				</executions>
-			</plugin>
+			</plugin>		
+			
 		</plugins>
 	</build>
 	
@@ -59,8 +60,6 @@
 			<url>https://dl.bintray.com/clearvolume/ClearVolume</url>
 		</repository>
 	</repositories>
-	
-	
 
 	<dependencies>
 		<dependency>
@@ -77,6 +76,14 @@
 			<groupId>net.imagej</groupId>
 			<artifactId>imagej-ops</artifactId>
 			<version>0.38.1-SNAPSHOT</version>
+		</dependency>
+		  
+		<dependency>
+			<groupId>metroloJ</groupId>
+			<artifactId>metroloJ</artifactId>
+			<version>1.0</version>
+			<scope>system</scope>
+			<systemPath>${basedir}/metroloj_.jar</systemPath>
 		</dependency>
 	
 		<!-- Imglib2 dependencies -->
