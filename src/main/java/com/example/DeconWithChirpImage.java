@@ -23,7 +23,7 @@ final static ImageJ ij = new ImageJ();
 		
 		ij.launch(args);
 		
-		Img<T> blank=(Img<T>)ij.op().create().img(new FinalDimensions(512,512),new FloatType());
+		Img<T> blank=(Img)ij.op().create().img(new long[] {512,512});
 		
 		String formula = "50 * (Math.sin(2*Math.PI*0.1*Math.pow(3,p[0]/149.8)*p[0]/149.8 )+1)+1";
 		
@@ -39,11 +39,11 @@ final static ImageJ ij = new ImageJ();
 		
 		ij.ui().show(blank);
 		
-		Img<T> kernel=(Img<T>)ij.op().create().kernelGauss(new double[]{12.0, 12.0});
+		Img<T> kernel=(Img)ij.op().create().kernelGauss(new double[]{12.0, 12.0});
 		
 		ij.ui().show(kernel);
 		
-		Img<T> convolved=(Img<T>)ij.op().filter().convolve(blank, kernel);
+		Img<T> convolved=(Img)ij.op().filter().convolve(blank, kernel);
 		
 		ij.ui().show("convolved", convolved);
 		
@@ -51,8 +51,8 @@ final static ImageJ ij = new ImageJ();
 		
 		ij.ui().show(cropped);
 		
-		Img<T> deconvolved=(Img<T>)ij.op().deconvolve().richardsonLucy(convolved, kernel, null, null, null, null, null, 20, false, true);
-		Img<T> deconvolvedcropped=(Img<T>)ij.op().deconvolve().richardsonLucy(cropped, kernel, null, null, null, null, null, 20, true, true);
+		Img<T> deconvolved=(Img)ij.op().deconvolve().richardsonLucy(convolved, kernel, null, null, null, null, null, 20, false, true);
+		Img<T> deconvolvedcropped=(Img)ij.op().deconvolve().richardsonLucy(cropped, kernel, null, null, null, null, null, 20, true, true);
 		
 		ij.ui().show(deconvolved);
 		ij.ui().show(deconvolvedcropped);
