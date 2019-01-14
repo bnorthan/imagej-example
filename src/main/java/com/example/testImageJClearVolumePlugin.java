@@ -36,14 +36,15 @@ public class testImageJClearVolumePlugin {
 			}
 
 			ij.ui().showUI();
-
+/*
 			if ( ds != null ) {
 				ij.command().run(
 						de.mpicbg.jug.plugins.ClearVolumePlugin.class,
 						true,
 						"datasetView",
 						dsv );
-			}
+						
+			}*/
 		}
 		catch (final IOException e)
 		{

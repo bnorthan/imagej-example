@@ -7,11 +7,11 @@ import java.util.List;
 import org.scijava.command.Command;
 import org.scijava.plugin.Plugin;
 
-import clearvolume.renderer.ClearVolumeRendererInterface;
-import clearvolume.renderer.factory.ClearVolumeRendererFactory;
-import clearvolume.transferf.TransferFunctions;
-import coremem.enums.NativeTypeEnum;
-import de.mpicbg.jug.clearvolume.ImgLib2ClearVolume;
+//import clearvolume.renderer.ClearVolumeRendererInterface;
+//import clearvolume.renderer.factory.ClearVolumeRendererFactory;
+//import clearvolume.transferf.TransferFunctions;
+//import coremem.enums.NativeTypeEnum;
+//import de.mpicbg.jug.clearvolume.ImgLib2ClearVolume;
 import net.imagej.ImageJ;
 import net.imglib2.FinalDimensions;
 import net.imglib2.RandomAccess;
@@ -58,10 +58,10 @@ public class LaunchImageJAndTryClearVolume {
 		
 		//clearVolumeExample();
 		
-		clearVolumeShowImg(img);
+		//clearVolumeShowImg(img);
 
 	}
-	
+/*	
 	private static void clearVolumeShowImg(Img<FloatType> img) {
 		
 		final List< RandomAccessibleInterval< FloatType >> imgs =
@@ -140,4 +140,5 @@ public class LaunchImageJAndTryClearVolume {
 
 		
 	}
+	*/
 }
