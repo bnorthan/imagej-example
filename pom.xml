@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
@@ -22,7 +23,7 @@
 		<CoreMem.version>0.3.2</CoreMem.version>
 		<enforcer.skip>true</enforcer.skip>
 	</properties>
-	
+
 	<build>
 		<plugins>
 			<plugin>
@@ -38,11 +39,11 @@
 						<phase>none</phase>
 					</execution>
 				</executions>
-			</plugin>		
-			
+			</plugin>
+
 		</plugins>
 	</build>
-	
+
 	<repositories>
 		<repository>
 			<id>imagej.public</id>
@@ -66,18 +67,25 @@
 			<groupId>net.imagej</groupId>
 			<artifactId>imagej</artifactId>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>net.imagej</groupId>
 			<artifactId>imagej-legacy</artifactId>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>net.imagej</groupId>
 			<artifactId>imagej-ops</artifactId>
-			<version>0.38.1-SNAPSHOT</version>
 		</dependency>
-		  
+
+		<dependency>
+			<groupId>net.imagej</groupId>
+			<artifactId>imagej-ops</artifactId>
+			<version>0.43.3-SNAPSHOT</version>
+			<type>test-jar</type>
+			<scope>test</scope>
+		</dependency>
+
 		<dependency>
 			<groupId>metroloJ</groupId>
 			<artifactId>metroloJ</artifactId>
