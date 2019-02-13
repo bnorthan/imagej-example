@@ -31,7 +31,7 @@ public class ProjectionTest {
 
 		// final Img<T> img = (Img<T>)
 		// ij.dataset().open(inputName).getImgPlus().getImg();
-		final Dataset currentData = ij.dataset().open(inputName);
+		final Dataset currentData = (Dataset) ij.io().open(inputName);
 
 		ij.ui().show(currentData);
 
