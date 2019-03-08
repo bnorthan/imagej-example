@@ -37,11 +37,13 @@ public class NumPyWhereEquivalent {
 		
 		T max = ij.op().stats().max(image);
 		
+		final Img<T> out = ij.op().create().img(image);
+		
 		UnaryComputerOp<T, T> op=new AbstractUnaryComputerOp<T, T>() {
 
 			@Override
 			public void compute(T input, T output) {
-				if (input.getRealFloat()>0) {
+				if (input.getRealFloat()>120) {
 					output.set(input);
 				}
 				else {
@@ -50,7 +52,9 @@ public class NumPyWhereEquivalent {
 			}
 		};
 		
-		ij.op().map(Views.iterable(image), Views.iterable(image), op);
+		ij.op().map(Views.iterable(out), Views.iterable(image), op);
+		
+		ij.ui().show(out);
 
 		System.out.println(max.getClass());
 
