@@ -24,12 +24,12 @@ public class ConvolveBorderExample_List_3_18_19 {
 
 		@SuppressWarnings("unchecked")
 		final Img<T> image = (Img<T>) ij.io().open(
-			"http://imagej.net/images/bridge.gif"); // convenient example stack
+			"http://imagej.net/images/confocal-series.zip"); // convenient example stack
 
 		ij.ui().show("bridge", image);
 		
 		RandomAccessibleInterval<FloatType> logKernel=ij.op().create().kernelLog(sigma, image.numDimensions(), new FloatType());
-		RandomAccessibleInterval<FloatType> logFiltered=ij.op().filter().convolve(image, logKernel, null, new OutOfBoundsBorderFactory());
+		RandomAccessibleInterval<FloatType> logFiltered=ij.op().filter().convolve(image, logKernel, new OutOfBoundsBorderFactory());
 		
 		ij.ui().show("log filtered", logFiltered);
 	}

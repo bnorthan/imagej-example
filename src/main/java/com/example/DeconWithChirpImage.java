@@ -4,6 +4,7 @@ import java.io.IOException;
 
 import ij.IJ;
 import net.imagej.ImageJ;
+import net.imagej.ops.Ops;
 import net.imglib2.FinalDimensions;
 import net.imglib2.FinalInterval;
 import net.imglib2.IterableInterval;
@@ -35,7 +36,7 @@ final static ImageJ ij = new ImageJ();
 		
 		//Img<T> exponentialChirp = (Img<T>)ij.op().image().equation((IterableInterval)ii, formula);
 		
-		ij.op().image().equation((IterableInterval<T>)ii, formula2);
+		ij.op().image().equation((IterableInterval<T>)ii, formula);
 		
 		ij.ui().show(blank);
 		
@@ -43,19 +44,23 @@ final static ImageJ ij = new ImageJ();
 		
 		ij.ui().show(kernel);
 		
-		Img<T> convolved=(Img)ij.op().filter().convolve(blank, kernel);
+		Img<FloatType> convolved=ij.op().create().img(blank, new FloatType());
+		ij.op().filter().convolve(convolved, blank, kernel);
 		
 		ij.ui().show("convolved", convolved);
 		
 		RandomAccessibleInterval<T> cropped=(RandomAccessibleInterval<T>)ij.op().transform().crop(convolved, new FinalInterval(511,256));
 		
-		ij.ui().show(cropped);
+		ij.ui().show("cropped", cropped);
 		
-		Img<T> deconvolved=(Img)ij.op().deconvolve().richardsonLucy(convolved, kernel, null, null, null, null, null, 20, false, true);
-		Img<T> deconvolvedcropped=(Img)ij.op().deconvolve().richardsonLucy(cropped, kernel, null, null, null, null, null, 20, true, true);
+		Img<FloatType> deconvolved=ij.op().create().img(convolved, new FloatType());
+		Img<FloatType> deconvolvedcropped=ij.op().create().img(cropped, new FloatType());
+				
+		ij.op().deconvolve().richardsonLucy(deconvolved, convolved, kernel, null, null, null, null, null, 20, false, true);
+		ij.op().deconvolve().richardsonLucy(deconvolvedcropped, deconvolved, kernel, null, null, null, null, null, 20, true, true);
 		
-		ij.ui().show(deconvolved);
-		ij.ui().show(deconvolvedcropped);
+		ij.ui().show("deconvolved", deconvolved);
+		ij.ui().show("deconvolvedcropped", deconvolvedcropped);
 		
 	}
 
