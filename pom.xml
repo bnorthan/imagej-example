@@ -7,7 +7,7 @@
 	<parent>
 		<groupId>org.scijava</groupId>
 		<artifactId>pom-scijava</artifactId>
-		<version>24.0.0</version>
+		<version>26.0.0</version>
 		<relativePath />
 	</parent>
 
@@ -76,6 +76,7 @@
 		<dependency>
 			<groupId>net.imagej</groupId>
 			<artifactId>imagej-ops</artifactId>
+			<version>0.44.1-SNAPSHOT</version>
 		</dependency>
 
 		<dependency>
