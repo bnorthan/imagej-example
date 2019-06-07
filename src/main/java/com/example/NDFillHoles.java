@@ -30,9 +30,8 @@ public class NDFillHoles {
 
 		ij.launch(args);
 
-		// final Dataset data= (Dataset)
-		// ij.io().open("./binary_image_XYZT-cropped.tif");
-		ImgPlus data = new ImgOpener().openImg("./binary_image_XYZT-cropped.tif");
+		final Dataset data = (Dataset) ij.io().open(
+			"./binary_image_XYZT-cropped.tif");
 
 		// final Dataset data= (Dataset) ij.io().open("./small_boats.tif");
 
@@ -44,7 +43,7 @@ public class NDFillHoles {
 			ij.log().info("");
 		}
 
-		Img<BitType> b = ij.op().convert().bit((Img<T>)data);
+		Img<BitType> b = ij.op().convert().bit((Img<T>) data.getImgPlus());
 		Img<BitType> out = ij.op().create().img(b);
 
 		ij.ui().show(b);
