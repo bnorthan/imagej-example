@@ -4,9 +4,7 @@ package com.example.viewingimages;
 import java.io.IOException;
 
 import net.imagej.Dataset;
-import net.imagej.DatasetService;
 import net.imagej.ImageJ;
-import net.imagej.ImgPlus;
 import net.imagej.ops.OpService;
 import net.imglib2.img.Img;
 import net.imglib2.type.NativeType;
@@ -26,11 +24,8 @@ public class Ex1b_CommandDisplayImages<T extends RealType<T> & NativeType<T>>
 	@Parameter
 	OpService ops;
 
-	@Parameter
-	DatasetService dai;
-
-	@Parameter
-	ImgPlus<T> in;
+	@Parameter(autoFill = false)
+	Img<T> in;
 
 	@Parameter(type = ItemIO.OUTPUT)
 	Img<T> out;
@@ -41,8 +36,6 @@ public class Ex1b_CommandDisplayImages<T extends RealType<T> & NativeType<T>>
 		out = ops.create().img(in);
 
 		ops.filter().addPoissonNoise(out, in);
-
-		// out = new ImgPlus( dai.create( temp), "noisy", );
 
 	}
 

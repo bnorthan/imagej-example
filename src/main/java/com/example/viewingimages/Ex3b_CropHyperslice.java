@@ -11,13 +11,15 @@ import net.imagej.ImageJ;
 import net.imagej.ImgPlus;
 import net.imagej.axis.Axes;
 import net.imagej.axis.AxisType;
+import net.imglib2.Interval;
 import net.imglib2.RandomAccessibleInterval;
 import net.imglib2.exception.IncompatibleTypeException;
 import net.imglib2.type.NativeType;
 import net.imglib2.type.numeric.RealType;
 import net.imglib2.util.Intervals;
+import net.imglib2.view.Views;
 
-public class Ex3_CropAndDisplayImages {
+public class Ex3b_CropHyperslice {
 
 	public static <T extends RealType<T> & NativeType<T>> void main(
 		final String[] args) throws IOException, ImgIOException,
@@ -37,13 +39,13 @@ public class Ex3_CropAndDisplayImages {
 																																						// example
 																																						// stack
 
+		ij.ui().show(image);
+
 		for (int d = 0; d < image.numDimensions(); d++) {
 			ij.log().info(image.axis(d).type());
 			ij.log().info(image.dimension(d));
 			ij.log().info("");
 		}
-
-		ij.ui().show(image);
 
 		long xLen = image.dimension(image.dimensionIndex(Axes.X));
 		long yLen = image.dimension(image.dimensionIndex(Axes.Y));
@@ -51,10 +53,21 @@ public class Ex3_CropAndDisplayImages {
 		long cLen = image.dimension(image.dimensionIndex(Axes.CHANNEL));
 		long tLen = image.dimension(image.dimensionIndex(Axes.TIME));
 
+		ij.log().info("xLen is: "+xLen);
+		ij.log().info("yLen is: "+yLen);
+		ij.log().info("zLen is: "+zLen);
+		ij.log().info("cLen is: "+cLen);
+		ij.log().info("tLen is: "+tLen);
+		
+		// create an interval that includes all x,y and c at time point 0
+		Interval interval=Intervals.createMinMax(0, 0, 0, 0, 0, xLen -
+				1, yLen - 1, cLen - 1, zLen - 1, 0);
+		
 		// crop out the first timepoint (all x, y, z and channel at timepoint 1)
 		RandomAccessibleInterval<T> raiVolume = (RandomAccessibleInterval<T>) ij
-			.op().transform().crop(image, Intervals.createMinMax(0, 0, 0, 0, 0, xLen -
-				1, yLen - 1, cLen - 1, zLen - 1, 0));
+			.op().transform().crop(image, interval);
+		
+		RandomAccessibleInterval<T> raiVolume2 = (RandomAccessibleInterval<T>) Views.offsetInterval(image, interval); 
 
 		// display the image... note that something isn't quite right
 		ij.ui().show("RAI volume", raiVolume);
@@ -69,8 +82,5 @@ public class Ex3_CropAndDisplayImages {
 
 		// now the viewer should display the image with correct axis
 		ij.ui().show("ImgPlus volume", imgPlusVolume);
-
-		// ij.io().save(imgPlusVolume, "test_ij.io.save.tif");
-		// new ImgSaver().saveImg("test.ImgSaver.tif", imgPlusVolume);
 	}
 }

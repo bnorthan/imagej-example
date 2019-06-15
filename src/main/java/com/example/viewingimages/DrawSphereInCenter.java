@@ -4,8 +4,8 @@ package com.example.viewingimages;
 import net.imagej.ImageJ;
 import net.imagej.ops.OpService;
 import net.imglib2.Point;
-import net.imglib2.RandomAccessibleInterval;
 import net.imglib2.algorithm.region.hypersphere.HyperSphere;
+import net.imglib2.img.Img;
 import net.imglib2.type.NativeType;
 import net.imglib2.type.numeric.RealType;
 import net.imglib2.view.Views;
@@ -27,24 +27,21 @@ public class DrawSphereInCenter<T extends RealType<T> & NativeType<T>>
 	OpService ops;
 
 	@Parameter
-	RandomAccessibleInterval<T> rai;
-
-	@Parameter
-	ImageJ ij;
+	Img<T> img;
 
 	@Override
 	public void run() {
-		final Point center = new Point(rai.numDimensions());
+		final Point center = new Point(img.numDimensions());
 
-		for (int d = 0; d < rai.numDimensions(); d++)
-			center.setPosition(rai.dimension(d) / 2, d);
+		for (int d = 0; d < img.numDimensions(); d++)
+			center.setPosition(img.dimension(d) / 2, d);
 
-		long radius = Math.min(rai.dimension(0), Math.min(rai.dimension(1), rai
+		long radius = Math.min(img.dimension(0), Math.min(img.dimension(1), img
 			.dimension(2)));
 
-		T intensity = ops.stats().max(Views.iterable(rai));
+		T intensity = ops.stats().max(Views.iterable(img));
 
-		HyperSphere<T> hyperSphere = new HyperSphere<>(rai, center, radius);
+		HyperSphere<T> hyperSphere = new HyperSphere<>(img, center, radius);
 
 		for (final T value : hyperSphere) {
 			value.setReal(intensity.getRealFloat());

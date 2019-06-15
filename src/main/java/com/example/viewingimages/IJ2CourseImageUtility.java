@@ -9,6 +9,7 @@ import ij.process.LUT;
 
 public class IJ2CourseImageUtility {
 
+	// copied from LutLoader()....
 	public static LUT fire() {
 		byte[] reds = new byte[256];
 		byte[] greens = new byte[256];
@@ -32,6 +33,7 @@ public class IJ2CourseImageUtility {
 		return new LUT(reds, greens, blues);
 	}
 
+	// copied from LutLoader....
 	static void interpolate(byte[] reds, byte[] greens, byte[] blues,
 		int nColors)
 	{

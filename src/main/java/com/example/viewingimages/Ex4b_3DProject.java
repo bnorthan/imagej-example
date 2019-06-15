@@ -23,23 +23,7 @@ import net.imglib2.type.numeric.real.FloatType;
 import net.imglib2.view.IntervalView;
 import net.imglib2.view.Views;
 
-public class Ex4_3DProjections {
-
-	public static <T extends RealType<T> & NativeType<T>>
-		RandomAccessibleInterval<T> XZY(RandomAccessibleInterval<T> rai)
-	{
-
-		IntervalView<T> xyzView = Views.permute(rai, 1, 2);
-
-		FinalInterval permutedInterval = new FinalInterval(rai.dimension(0) - 1, rai
-			.dimension(2) - 1, rai.dimension(1) - 1);
-
-		RandomAccessibleInterval<T> permutedRAI = Views.interval(xyzView,
-			permutedInterval);
-
-		return permutedRAI;
-
-	}
+public class Ex4b_3DProject {
 
 	public static <T extends RealType<T> & NativeType<T>> IterableInterval<T>
 		projectBad(ImgPlus<T> imgPlus, AxisType ax, OpService ops)
@@ -115,14 +99,6 @@ public class Ex4_3DProjections {
 		ij.ui().show(cells);
 		ij.ui().show(cells_sd);
 
-		RandomAccessibleInterval<T> raiCellXYZ = XZY(
-			(RandomAccessibleInterval<T>) cells);
-		RandomAccessibleInterval<T> raiCell_sdXYZ = XZY(
-			(RandomAccessibleInterval<T>) cells_sd);
-
-		ij.ui().show("Widefield XYZ", raiCellXYZ);
-		ij.ui().show("Spinning Disc XYZ", raiCell_sdXYZ);
-
 		IterableInterval<T> projectionBad = projectBad((ImgPlus<T>) cells
 			.getImgPlus(), Axes.Y, ij.op());
 		IterableInterval<FloatType> projectionBetter = projectBetter(
@@ -130,7 +106,5 @@ public class Ex4_3DProjections {
 
 		ij.ui().show("Cell Y Projection", projectionBad);
 		ij.ui().show("Cell Y Projection", projectionBetter);
-
-		// Img<T> sumProjection_wf = ij.op().create()
 	}
 }

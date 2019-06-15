@@ -23,15 +23,25 @@ public class Ex1_OpenAndDisplayImages {
 		final ImageJ ij = new ImageJ();
 
 		// launch it
-		ij.launch(args);
+		ij.ui().showUI();
 
 		// get bridge as IJ1 ImagePlus (imp)
-		ImagePlus impBridge = IJ.openImage("http://imagej.net/images/bridge.gif");
+		ImagePlus impBridge = IJ.openImage("../images/bridge.tif");
 
 		// get bridge as IJ2 Dataset
 		// Dataset
-		// dataBridge=(Dataset)ij.io().open("http://imagej.net/images/bridge.gif");
 		Dataset datasetBridge = (Dataset) ij.io().open("../images/bridge.tif");
+
+		// show the IJ1 ImagePlus
+		impBridge.show();
+		impBridge.setTitle("ImageJ1 ImagePlus");
+
+		// show the IJ2 Dataset
+		ij.ui().show("Bridge IJ2 ij.ui().show", datasetBridge);
+
+		// show using imagej functions
+		ImageJFunctions.show((RandomAccessibleInterval<T>) datasetBridge
+			.getImgPlus()).setTitle("Bridge IJ2 ImageJFunctions.show");
 
 		// take a look at the bit depth and data type of the image in IJ1
 		ij.log().info("IJ1 bit depth " + impBridge.getBitDepth());
@@ -43,17 +53,6 @@ public class Ex1_OpenAndDisplayImages {
 		ij.log().info("IJ2 type " + datasetBridge.firstElement().getClass());
 		ij.log().info("");
 
-		// show the
-		impBridge.show();
-
 		IJ2CourseImageUtility.displayAxisInfo(datasetBridge, ij.log());
-
-		// show IJ2
-		ij.ui().show(datasetBridge);
-
-		// show using imagej functions
-		ImageJFunctions.show((RandomAccessibleInterval<T>) datasetBridge
-			.getImgPlus());
-
 	}
 }

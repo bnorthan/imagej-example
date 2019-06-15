@@ -17,6 +17,7 @@ import ij.process.LUT;
 
 public class Ex2_ProcessIJ2DisplayIJ1 {
 
+	@SuppressWarnings("unchecked")
 	public static <T extends RealType<T> & NativeType<T>> void main(
 		final String[] args) throws IOException
 	{
