@@ -61,7 +61,7 @@
 					<section>
 						<ol>
 							<li>Learn to show images within Java programs using both ImageJ1 and ImageJ2</li>
-							<li>Learn to access ImageJ1 Visualization API</li>
+							<li>Learn to access ImageJ1 Visualization routines from your java program</li>
 							<li>Learn how to use ImageJ2 API (ops, imglib2, Views, etc.) for basic visualization</li> 
 							<ul>
 								<li>Ops and Imglib2 will be explained in detail in later sessions</li>
@@ -104,7 +104,7 @@
 
 					<section>
 						<p>Start ImageJ</p>
-						<pre><code class="java" data-trim contenteditable>
+						<pre><code class="java" data-trim data-noescape contenteditable>
 // create an instance of imagej
 final ImageJ ij = new ImageJ();
 
@@ -119,7 +119,7 @@ ij.ui().showUI();
 							<li>ImageJ1 ImagePlus</li>
 							<li>ImageJ2 Dataset</li>
 						</ul>
-						<pre><code class="java" data-trim contenteditable>
+						<pre><code class="java" data-trim data-noescape contenteditable>
 // get bridge as IJ1 ImagePlus (imp)
 ImagePlus impBridge = IJ.openImage("../images/bridge.tif");
 
@@ -131,7 +131,7 @@ Dataset datasetBridge = (Dataset) ij.io().open("../images/bridge.tif");
 					</section>
 					<section>
 						<p>Display Image using IJ1</p>
-						<pre><code class="java" data-trim contenteditable>
+						<pre><code class="java" data-trim data-noescape contenteditable>
 // show the IJ1 ImagePlus
 impBridge.show();
 impBridge.setTitle("ImageJ1 ImagePlus");
@@ -140,14 +140,14 @@ impBridge.setTitle("ImageJ1 ImagePlus");
 
 					<section>
 						<p>Display Image using IJ2 UIService</p>
-						<pre><code class="java" data-trim contenteditable>
+						<pre><code class="java" data-trim data-noescape contenteditable>
 // show the IJ2 Dataset
 ij.ui().show("Bridge IJ2 ij.ui().show", datasetBridge);
 						</code></pre>
 					</section>
 					<section>
 						<p>Display Image using IJ2 ImageJFunctions</p>
-						<pre><code class="java" data-trim contenteditable>
+						<pre><code class="java" data-trim data-noescape contenteditable>
 // show using imagej functions
 ImageJFunctions.show((RandomAccessibleInterval) datasetBridge
 	.getImgPlus()).setTitle("Bridge IJ2 ImageJFunctions.show");
@@ -163,7 +163,7 @@ ImageJFunctions.show((RandomAccessibleInterval) datasetBridge
 						<ul>
 							<li>Framework does it automatically</li>
 						</ul>
-						<pre><code class="java" data-trim contenteditable>
+						<pre><code class="java" data-trim data-noescape contenteditable>
 
 @Parameter(type = ItemIO.OUTPUT)
 Img out;
@@ -201,7 +201,7 @@ public void run() {
 							<li><a href="https://github.com/imagej/imagej-ops">Ops is an extensible library for algorithms</a></li>
 							<li>More on Ops soon...</li>
 						</ul>
-						<pre><code class="java" data-trim contenteditable>
+						<pre><code class="java" data-trim data-noescape contenteditable>
 
 // create an instance of imagej
 final ImageJ ij = new ImageJ();
@@ -221,7 +221,7 @@ RandomAccessibleInterval blurred = ij.op().filter().gauss(
 
 					<section>
 						<h3>Convert to IJ1 and show...</h3>
-					<pre><code class="java" data-trim contenteditable>
+					<pre><code class="java" data-trim data-noescape contenteditable>
 // convert bridge to IJ1
 ImagePlus impBridge = ImageJFunctions.wrap(
 (RandomAccessibleInterval) dataBridge, "bridge");
@@ -242,7 +242,7 @@ impBlurred.show();
 							<li>Scavenge fire and interpolate functions</li>
 						</ul>
 
-						<pre><code class="java" data-trim contenteditable>
+						<pre><code class="java" data-trim data-noescape contenteditable>
 
 // get the fire color map using the Utility
 // (note the code in the Utility was cut and pasted from LutLoader
@@ -273,7 +273,7 @@ impBlurred.updateAndRepaintWindow();
 						<ul>
 							<li>Line profiles are useful for before and after comparisons</li>
 						</ul>
-						<pre><code class="java" data-trim contenteditable>
+						<pre><code class="java" data-trim data-noescape contenteditable>
 
 // now draw an ROI (using the IJ1 interface) on each image and plot it
 impBridge.setRoi(new Line(100, 100, 200, 200));
@@ -294,7 +294,10 @@ plotter2.createWindow();
 					</section>
 
 					<section>
-						<p>Use Plugins->Macros->Record...(java)</p>
+						<ul>
+							<li>Run your favourite IJ1 routine</li>	
+							<li>Use Plugins->Macros->Record...(java)</li>
+						<ul>
 						<img src="RecordJava.jpg" height="400">
 					</section>
 
@@ -311,10 +314,12 @@ plotter2.createWindow();
 						 <ul>
 							 <li>What happens on the RAI?</li>
 						 </ul>
+						<li>Try cropping out of bounds</li>
+						 <ul>
+							 <li>What happens?</li>
+						 </ul>
 						<li>Open ND Data</li>
 						<li>Inspect Axis Types</li>
-						<li>Visualize ROI (RAIs)</li>
-						<li>Set axis types</li>
 					</ul>
 				 </section>
 
@@ -331,7 +336,7 @@ plotter2.createWindow();
 							 <li>What happens on the RAI?</li>
 						 </ul>
 					
-						<pre><code class="java" data-trim contenteditable>
+						<pre><code class="java" data-trim data-noescape contenteditable>
 Interval interval = Intervals.createMinMax(100, 100, 20, 400, 400, 40);
 
 // crop interval
@@ -350,7 +355,7 @@ ij.ui().show("RAI volume", raiVolume);
 
 					<section>
 						<p>Draw Sphere Command</p>
-						<pre><code class="c++" data-trim contenteditable>
+						<pre><code class="c++" data-trim data-noescape contenteditable>
 @Plugin(type = Command.class,
 	menuPath = "Plugins>Learnathon>Draw A Sphere (IJ2)")
 public class DrawSphereInCenter<T extends RealType<T> & NativeType<T>>
@@ -393,7 +398,7 @@ public class DrawSphereInCenter<T extends RealType<T> & NativeType<T>>
 
 					<section>
 						<h3>What if the Interval is out of bounds</h3>
-						<pre><code class="java" data-trim contenteditable>
+						<pre><code class="java" data-trim data-noescape contenteditable>
 
 Interval interval = Intervals.createMinMax(-100, 100, 200, 700);
 	
@@ -413,7 +418,7 @@ ij.ui().show("RAI", rai);
 
 					<section>
 						<h3>Try again...</h3>
-						<pre><code class="java" data-trim contenteditable>
+						<pre><code class="java" data-trim data-noescape contenteditable>
 
 Interval interval = Intervals.createMinMax(-100, 100, 200, 700);
 	
@@ -440,7 +445,7 @@ ij.ui().show("RAI", rai);
 
 					<section>
 						<p>Show axis info using dimension index</p>
-						<pre><code class="java" data-trim contenteditable>
+						<pre><code class="java" data-trim data-noescape contenteditable>
 
 for (int d = 0; d < image.numDimensions(); d++) {
 	ij.log().info(image.axis(d).type());
@@ -452,7 +457,7 @@ for (int d = 0; d < image.numDimensions(); d++) {
 
 					<section>
 						<h3>Show axis size using axis enumeration</h3>
-						<pre><code class="java" data-trim contenteditable>
+						<pre><code class="java" data-trim data-noescape contenteditable>
 long xLen = image.dimension(image.dimensionIndex(Axes.X));
 long yLen = image.dimension(image.dimensionIndex(Axes.Y));
 long zLen = image.dimension(image.dimensionIndex(Axes.Z));
@@ -469,7 +474,7 @@ ij.log().info("tLen is: "+tLen);
 
 					<section>
 						<h3>Crop Hyperslice</h3>
-						<pre><code class="java" data-trim contenteditable>
+						<pre><code class="java" data-trim data-noescape contenteditable>
 // create an interval that includes all x,y and c at time point 0
 Interval interval=Intervals.createMinMax(0, 0, 0, 0, 0, xLen -
 		1, yLen - 1, cLen - 1, zLen - 1, 0);
@@ -485,7 +490,7 @@ RandomAccessibleInterval<T> raiVolume2 = (RandomAccessibleInterval<T>) Views.off
 
 					<section>
 						<h3>Convert to ImgPlus and set axis</h3>
-						<pre><code class="java" data-trim contenteditable>
+						<pre><code class="java" data-trim cdata-noescape ontenteditable>
 // the cropped section is an RAI. To get it to display correctly we need to
 // use the dtaasetservice to convert it to an ImgPlus with ocrrect axis
 DatasetService datasetService = ij.dataset();
@@ -524,7 +529,7 @@ ImgPlus imgPlusVolume = new ImgPlus(datasetService.create(raiVolume),
 
 						</ul>
 
-						<pre><code class="java" data-trim contenteditable>
+						<pre><code class="java" data-trim data-noescape contenteditable>
 
 IntervalView<T> raiCellXYZ = Views.permute(
 	(RandomAccessibleInterval<T>) cells, 1, 2);
@@ -537,7 +542,7 @@ IntervalView<T> raiCell_sdXYZ = Views.permute(
 
 					<section>
 						<h3>Projections using ops</h3>
-						<pre><code class="java" data-trim contenteditable>
+						<pre><code class="java" data-trim data-noescape contenteditable>
 int projectedDimensionIndex = 1;
 
 long[] projectedDimensions = new long[] { imgPlus.dimension(0), imgPlus
@@ -619,7 +624,7 @@ while (c1.hasNext()) {
 
 					<section>
 						<p>Perform FFT using ops, Display real and complex parts</p>
-						<pre><code class="java" data-trim contenteditable>
+						<pre><code class="java" data-trim data-noescape contenteditable>
 	
 RandomAccessibleInterval<FloatType> fft=ij.op().filter().fft(impBridge);
 
