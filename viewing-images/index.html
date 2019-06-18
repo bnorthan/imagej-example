@@ -55,25 +55,43 @@
 					</small>
 					</p>
 				</section>
+
 				<section data-background="http://imagej.net/_images/7/72/Imagej-25%25.png">
-					<h2>Outline</h2>
+					<h3>Goals</h3>
+					<section>
+						<ol>
+							<li>Learn to show images within Java programs using both ImageJ1 and ImageJ2</li>
+							<li>Learn to access ImageJ1 Visualization API</li>
+							<li>Learn how to use ImageJ2 API (ops, imglib2, Views, etc.) for basic visualization</li> 
+							<ul>
+								<li>Ops and Imglib2 will be explained in detail in later sessions</li>
+							</ul>
+							<li>Learn to display multidimensional and complex data</li>
+							<li>Basic use of imglib2 to render data</li>
+							
+					</ol>
+					</section>
+				</section>
+
+				<section data-background="http://imagej.net/_images/7/72/Imagej-25%25.png">
+					<h3>Outline</h3>
 					<section>
 						<ol>
 							<li>Display images using IJ1 and IJ2 API</li>
-							<li>Process in IJ2 (Apply a filter) Visualize in IJ1 (Apply a color map, plot line profiles)</li>
-							<li>Multidimensional Data - Open ND data, look at axis types, crop multidimensional data using ops interface, visualize, set axis types, visualize again</li>
+							<li>Process in IJ2 (Apply a filter) Visualize in IJ1</li>
+							<li>Multidimensional Data - look at axis types, crop multidimensional data, set axis types</li>
 							<li>Open 3D data, reslice using imglib2, generate projections using ij-ops.</li>
 								<ol>
-									<li>Draw a sphere on the original image.  Is the sphere in the resliced version??  Try again but remove 'imagej-legacy'.</li>
+									<li>Draw a sphere on the original image.  Is the sphere in the resliced version??</li>
 								</ol>
-							<li>Read in a list of points from ThunderStorm, Render emitters as Gaussians with width porportional to uncertainty.</li>
+							<li>Read in a list of points from ThunderStorm, Render emitters</li>
 							<li>Apply Fast Fourier Transform and visualize complex and real parts of an image</li>
 						</ol>
 					</section>
 				</section>
 
 					<section data-background="http://imagej.net/_images/7/72/Imagej-25%25.png">
-					<h2>Example 1 Open and Display Images</h2>
+					<h3>Example 1 Open and Display Images</h3>
 
 				 <section>
 				 	<ul>
@@ -137,6 +155,10 @@ ImageJFunctions.show((RandomAccessibleInterval) datasetBridge
 					</section>
 
 					<section>
+							<img src="OpenImages.jpg" height="400">
+						</section>
+	
+					<section>
 						<p>Display output of Command</p>
 						<ul>
 							<li>Framework does it automatically</li>
@@ -153,7 +175,12 @@ public void run() {
 }
 						</code></pre>
 					</section>
-				</section>	
+	
+					<section>
+							<img src="Command.jpg" height="400">
+						</section>
+				
+			</section>	
 
 				<section data-background="http://imagej.net/_images/7/72/Imagej-25%25.png">
 					<h2>Example 2 Mixed World</h2>
@@ -211,7 +238,7 @@ impBlurred.show();
 						<h3>Scavenge 'fire' LUT from IJ1 LutLoader</h3>
 						<ul>
 							<li>[Ctrl] [Shift] [T] then search for LutLoader</li>
-							<li>Look fire method (not public??)</li>
+							<li>Look for fire method (not public??)</li>
 							<li>Scavenge fire and interpolate functions</li>
 						</ul>
 
@@ -266,13 +293,15 @@ plotter2.createWindow();
 						<img src="lineprofiles.jpg">
 					</section>
 
-
-
+					<section>
+						<p>Use Plugins->Macros->Record...(java)</p>
+						<img src="RecordJava.jpg" height="400">
+					</section>
 
 			</section>
 
 				<section data-background="http://imagej.net/_images/7/72/Imagej-25%25.png">
-					<h2>Example 3 ND Data</h2> 
+					<h3>Example 3 Cropping Data</h3> 
 
 				 <section>
 				 	<ul>
@@ -290,10 +319,13 @@ plotter2.createWindow();
 				 </section>
 
 					<section>
-						<p>Open 3D Data</p>
 						<ul>
-						<li>Open 3D Data</li>
 						<li>Display an ROI a.k.a RAI</li>
+						<ul>
+							<li>Use ops to crop</li>
+							<li>Alternatively use Views</li>
+							<li>More on ops and Views in a later session</li>
+						</ul>
 						<li>Draw a sphere on the data</li>
 						 <ul>
 							 <li>What happens on the RAI?</li>
@@ -305,6 +337,11 @@ Interval interval = Intervals.createMinMax(100, 100, 20, 400, 400, 40);
 // crop interval
 RandomAccessibleInterval raiVolume = (RandomAccessibleInterval) ij
 	.op().transform().crop(image, interval);
+
+
+// alternatively you can use Views directly
+RandomAccessibleInterval<T> rai2 = (RandomAccessibleInterval<T>) Views
+	.interval(image, interval);
 
 // display the image
 ij.ui().show("RAI volume", raiVolume);
@@ -355,7 +392,54 @@ public class DrawSphereInCenter<T extends RealType<T> & NativeType<T>>
 					</section>
 
 					<section>
-						<h3>Show axis info using dimension num</h3>
+						<h3>What if the Interval is out of bounds</h3>
+						<pre><code class="java" data-trim contenteditable>
+
+Interval interval = Intervals.createMinMax(-100, 100, 200, 700);
+	
+// Try cropping with an interval that goes out of bounds... 
+RandomAccessibleInterval<T> rai = (RandomAccessibleInterval<T>) Views
+	.interval(image, interval);
+
+// try again but extend image... (comment out above code, comment in this code)
+//RandomAccessibleInterval<T> rai = (RandomAccessibleInterval<T>) Views
+	//	.interval(Views.extendZero(image), interval);
+
+// display the image
+ij.ui().show("RAI", rai);
+			
+						</code></pre>
+					</section>
+
+					<section>
+						<h3>Try again...</h3>
+						<pre><code class="java" data-trim contenteditable>
+
+Interval interval = Intervals.createMinMax(-100, 100, 200, 700);
+	
+// Try cropping with an interval that goes out of bounds... 
+//RandomAccessibleInterval<T> rai = (RandomAccessibleInterval<T>) Views
+//	.interval(image, interval);
+
+// try again but extend image... (comment out above code, comment in this code)
+RandomAccessibleInterval<T> rai = (RandomAccessibleInterval<T>) Views
+		.interval(Views.extendZero(image), interval);
+
+// display the image
+ij.ui().show("RAI", rai);
+						
+						</code></pre>
+					</section>
+
+
+					<section>
+						<img src="CropOutOfBounds.jpg" height="500">
+					</section>
+
+
+
+					<section>
+						<p>Show axis info using dimension index</p>
 						<pre><code class="java" data-trim contenteditable>
 
 for (int d = 0; d < image.numDimensions(); d++) {
@@ -409,8 +493,6 @@ AxisType[] axisTypes = new AxisType[] { Axes.X, Axes.Y, Axes.CHANNEL,
 Axes.Z };
 ImgPlus imgPlusVolume = new ImgPlus(datasetService.create(raiVolume),
 "image", axisTypes);
-
-
 						
 						</code></pre>
 					</section>
@@ -420,12 +502,10 @@ ImgPlus imgPlusVolume = new ImgPlus(datasetService.create(raiVolume),
 						<img src="HyperSlice.jpg" height="500">
 					</section>
 
-
 			</section>
 
-
 				<section data-background="http://imagej.net/_images/7/72/Imagej-25%25.png">
-					<h2>Example 4 Permutions and Projections</h2>
+					<h3>Example 4 Permutions and Projections</h3>
 
 				 <section>
 				 	<ul>
@@ -434,6 +514,53 @@ ImgPlus imgPlusVolume = new ImgPlus(datasetService.create(raiVolume),
 						<li>Draw in the original.. does it appear in the reslice?</li>
 					</ul>
 				 </section>
+
+					<section>
+						<p>Permute (Reslice) using Views to see xz slices</p>
+						<ul>
+							<li>last 2 parameters are 'from' and 'to'</li>
+							<li>Switch 1 (y) and 2 (z)</li>
+							<li>Run 'Draw a Sphere' command again</li>
+
+						</ul>
+
+						<pre><code class="java" data-trim contenteditable>
+
+IntervalView<T> raiCellXYZ = Views.permute(
+	(RandomAccessibleInterval<T>) cells, 1, 2);
+IntervalView<T> raiCell_sdXYZ = Views.permute(
+	(RandomAccessibleInterval<T>) cells_sd, 1, 2);
+
+						
+						</code></pre>
+					</section>
+
+					<section>
+						<h3>Projections using ops</h3>
+						<pre><code class="java" data-trim contenteditable>
+int projectedDimensionIndex = 1;
+
+long[] projectedDimensions = new long[] { imgPlus.dimension(0), imgPlus
+	.dimension(2) };
+
+Img<T> projection = ops.create().img(new FinalDimensions(
+	projectedDimensions), imgPlus.firstElement());
+
+UnaryComputerOp projector = Computers.unary(ops, Ops.Stats.Sum.class,
+	projection.firstElement(), imgPlus);
+
+return ops.transform().project(projection, imgPlus, projector,
+	projectedDimensionIndex);
+
+						</code></pre>
+					</section>
+
+
+					<section>
+						<h3>What is wrong with this picture??</h3>
+						<img src="Projections.jpg" height="400">
+					</section>
+
 			</section>
 
 				<section data-background="http://imagej.net/_images/7/72/Imagej-25%25.png">
@@ -441,18 +568,77 @@ ImgPlus imgPlusVolume = new ImgPlus(datasetService.create(raiVolume),
 
 				 <section>
 				 	<ul>
+						<li>By the end of the week you should be able to...</li>
+						<ul>
 						<li>Use imglib2 to render points as Gaussian</li>
+						<li>Use Cursors to loop through data (pixels and more...)</li>
+						<li>Understand how to get and set 'Types'</li>
+						<li>Understand how to perform operations on 'Types'</li>
 					</ul>
+				 </section>
+
+					<section>
+						<ul>
+							<li>This code adds a Gaussian to an image</li>
+							<li>May not make sense yet...</li>
+							<li>It should by the end of the week</li>
+							
+						<pre><code class="java" data-trim data-noescape contenteditable>
+// get the RAI to draw the Gaussian in
+RandomAccessibleInterval<FloatType> rai = Views.interval(img,
+	new FinalInterval(start, end));
+
+Cursor<FloatType> c1 = Views.iterable(Views.zeroMin(rai)).cursor();
+Cursor<FloatType> c2 = Views.iterable(guassian).cursor();
+
+while (c1.hasNext()) {
+	c1.fwd();
+	c2.fwd();
+
+	c1.get().add(c2.get());
+}
+						</code></pre>
+					</section>
+
+				 <section>
+					<img src="RenderingPoints.jpg" height="400">
+				 </section>
+		
+				 <section>
+					 <ul>
+						 <li>Synaptic Clefts from Phillip Hanslovsky</li>
+					 	<li>More to come with this data next session...</li>
+					 </ul>
+					 </ul>
+						<img src="RenderingPoints2.jpg" height="400">
 				 </section>
 			</section>
 
 				<section data-background="http://imagej.net/_images/7/72/Imagej-25%25.png">
-					<h2>Example 6 - Complex Numbers</h2>
+					<h3>Example 6 - Complex Numbers</h3>
+
+					<section>
+						<p>Perform FFT using ops, Display real and complex parts</p>
+						<pre><code class="java" data-trim contenteditable>
+	
+RandomAccessibleInterval<FloatType> fft=ij.op().filter().fft(impBridge);
+
+// default is power spectrum
+ImageJFunctions.show(fft).setTitle("fft power spectrum");
+// real values
+ImageJFunctions.show(fft, new ComplexRealFloatConverter<FloatType>()).setTitle("fft real values");
+// imaginary values
+ImageJFunctions.show(fft, new ComplexImaginaryFloatConverter<FloatType>()).setTitle("fft imaginary values");
+						
+						</code></pre>
+					</section>
+
 
 				 <section>
 				 	<ul>
 						<li>Perform an FFT and show complex and real parts</li>
 					</ul>
+						<img src="FFT.jpg" height="400">
 				 </section>
 			</section>
 

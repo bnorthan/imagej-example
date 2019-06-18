@@ -13,33 +13,21 @@ import net.imagej.ops.Ops;
 import net.imagej.ops.special.computer.Computers;
 import net.imagej.ops.special.computer.UnaryComputerOp;
 import net.imglib2.FinalDimensions;
-import net.imglib2.FinalInterval;
 import net.imglib2.IterableInterval;
-import net.imglib2.RandomAccessibleInterval;
 import net.imglib2.img.Img;
 import net.imglib2.type.NativeType;
 import net.imglib2.type.numeric.RealType;
 import net.imglib2.type.numeric.real.FloatType;
-import net.imglib2.view.IntervalView;
-import net.imglib2.view.Views;
 
 public class Ex4b_3DProject {
 
 	public static <T extends RealType<T> & NativeType<T>> IterableInterval<T>
-		projectBad(ImgPlus<T> imgPlus, AxisType ax, OpService ops)
+		projectBad(ImgPlus<T> imgPlus, OpService ops)
 	{
-		long[] projectedDimensions = new long[imgPlus.numDimensions() - 1];
+		int projectedDimensionIndex = 1;
 
-		int projectedDimensionIndex = imgPlus.dimensionIndex(ax);
-
-		int i = 0;
-
-		for (int d = 0; d < imgPlus.numDimensions(); d++) {
-			if (d != projectedDimensionIndex) {
-				projectedDimensions[i] = imgPlus.dimension(d);
-				i++;
-			}
-		}
+		long[] projectedDimensions = new long[] { imgPlus.dimension(0), imgPlus
+			.dimension(2) };
 
 		Img<T> projection = ops.create().img(new FinalDimensions(
 			projectedDimensions), imgPlus.firstElement());
@@ -56,6 +44,7 @@ public class Ex4b_3DProject {
 		IterableInterval<FloatType> projectBetter(ImgPlus<T> imgPlus, AxisType ax,
 			OpService ops)
 	{
+
 		long[] projectedDimensions = new long[imgPlus.numDimensions() - 1];
 
 		int projectedDimensionIndex = imgPlus.dimensionIndex(ax);
@@ -100,11 +89,11 @@ public class Ex4b_3DProject {
 		ij.ui().show(cells_sd);
 
 		IterableInterval<T> projectionBad = projectBad((ImgPlus<T>) cells
-			.getImgPlus(), Axes.Y, ij.op());
+			.getImgPlus(), ij.op());
 		IterableInterval<FloatType> projectionBetter = projectBetter(
 			(ImgPlus<T>) cells.getImgPlus(), Axes.Y, ij.op());
 
-		ij.ui().show("Cell Y Projection", projectionBad);
-		ij.ui().show("Cell Y Projection", projectionBetter);
+		ij.ui().show("Cell Y Projection 1", projectionBad);
+		ij.ui().show("Cell Y Projection 2", projectionBetter);
 	}
 }

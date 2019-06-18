@@ -19,7 +19,7 @@ import net.imglib2.type.numeric.RealType;
 import net.imglib2.util.Intervals;
 import net.imglib2.view.Views;
 
-public class Ex3b_CropHyperslice {
+public class Ex3c_CropHyperslice {
 
 	public static <T extends RealType<T> & NativeType<T>> void main(
 		final String[] args) throws IOException, ImgIOException,
@@ -67,8 +67,14 @@ public class Ex3b_CropHyperslice {
 		RandomAccessibleInterval<T> raiVolume = (RandomAccessibleInterval<T>) ij
 			.op().transform().crop(image, interval);
 		
-		RandomAccessibleInterval<T> raiVolume2 = (RandomAccessibleInterval<T>) Views.offsetInterval(image, interval); 
-
+		RandomAccessibleInterval<T> raiVolume2 = (RandomAccessibleInterval<T>) Views.offsetInterval(image, interval);
+		
+		System.out.println("num dimensions are "+raiVolume2.numDimensions());
+		
+		raiVolume2=Views.dropSingletonDimensions(raiVolume2);
+		
+		System.out.println("num dimensions are "+raiVolume2.numDimensions());
+		
 		// display the image... note that something isn't quite right
 		ij.ui().show("RAI volume", raiVolume);
 

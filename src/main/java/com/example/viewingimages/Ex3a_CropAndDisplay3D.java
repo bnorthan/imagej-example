@@ -13,8 +13,9 @@ import net.imglib2.exception.IncompatibleTypeException;
 import net.imglib2.type.NativeType;
 import net.imglib2.type.numeric.RealType;
 import net.imglib2.util.Intervals;
+import net.imglib2.view.Views;
 
-public class Ex3a_CropAndDisplayImages3D {
+public class Ex3a_CropAndDisplay3D {
 
 	@SuppressWarnings("unchecked")
 	public static <T extends RealType<T> & NativeType<T>> void main(
@@ -36,11 +37,15 @@ public class Ex3a_CropAndDisplayImages3D {
 		Interval interval = Intervals.createMinMax(100, 100, 20, 400, 400, 40);
 
 		// crop interval
-		RandomAccessibleInterval<T> raiVolume = (RandomAccessibleInterval<T>) ij
-			.op().transform().crop(image, interval);
+		RandomAccessibleInterval<T> rai = (RandomAccessibleInterval<T>) ij.op()
+			.transform().crop(image, interval);
+
+		// alternatively you can use Views directly
+		//RandomAccessibleInterval<T> rai2 = (RandomAccessibleInterval<T>) Views
+			//.interval(image, interval);
 
 		// display the image
-		ij.ui().show("RAI volume", raiVolume);
-
+		ij.ui().show("RAI volume", rai);
+	
 	}
 }

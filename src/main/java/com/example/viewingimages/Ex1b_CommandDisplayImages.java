@@ -34,8 +34,9 @@ public class Ex1b_CommandDisplayImages<T extends RealType<T> & NativeType<T>>
 	public void run() {
 
 		out = ops.create().img(in);
+		ops.filter().gauss(out, in, 3.0);
 
-		ops.filter().addPoissonNoise(out, in);
+		//ops.filter().addPoissonNoise(out, in);
 
 	}
 

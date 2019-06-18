@@ -35,7 +35,7 @@ public class Ex4a_3DPermute {
 		IntervalView<T> raiCellXYZ = Views.permute(
 			(RandomAccessibleInterval<T>) cells, 1, 2);
 		IntervalView<T> raiCell_sdXYZ = Views.permute(
-			(RandomAccessibleInterval<T>) cells, 1, 2);
+			(RandomAccessibleInterval<T>) cells_sd, 1, 2);
 
 		ij.ui().show("Widefield XZY", raiCellXYZ);
 		ij.ui().show("Spinning Disc XZY", raiCell_sdXYZ);

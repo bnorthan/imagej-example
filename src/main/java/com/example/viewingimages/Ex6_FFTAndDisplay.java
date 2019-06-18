@@ -43,10 +43,12 @@ public class Ex6_FFTAndDisplay {
 		ij.ui().show(impBridge);
 		
 		RandomAccessibleInterval<FloatType> fft=ij.op().filter().fft(impBridge);
-		
+	
+		// default is power spectrum
 		ImageJFunctions.show(fft).setTitle("fft power spectrum");
-		ImageJFunctions.show(fft, new ComplexPhaseFloatConverter<FloatType>()).setTitle("fft power spectrum");
+		// real values
 		ImageJFunctions.show(fft, new ComplexRealFloatConverter<FloatType>()).setTitle("fft real values");
+		// imaginary values
 		ImageJFunctions.show(fft, new ComplexImaginaryFloatConverter<FloatType>()).setTitle("fft imaginary values");
 		
 
