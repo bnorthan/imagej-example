@@ -37,7 +37,7 @@ public class Ex1_OpenAndDisplayImages {
 		impBridge.setTitle("ImageJ1 ImagePlus");
 
 		// show the IJ2 Dataset
-		ij.ui().show("Bridge IJ2 ij.ui().show", datasetBridge);
+		ij.ui().show("Bridge IJ3 ij.ui().show", datasetBridge);
 
 		// show using imagej functions
 		ImageJFunctions.show((RandomAccessibleInterval<T>) datasetBridge

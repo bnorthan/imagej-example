@@ -37,12 +37,12 @@ public class Ex3b_CropOutOfBounds {
 		Interval interval = Intervals.createMinMax(-100, 100, 200, 700);
 			
 		// Try cropping with an interval that goes out of bounds... 
-		RandomAccessibleInterval<T> rai = (RandomAccessibleInterval<T>) Views
-			.interval(image, interval);
+	//	RandomAccessibleInterval<T> rai = (RandomAccessibleInterval<T>) Views
+		//	.interval(image, interval);
 
 		// try again but extend image... (comment out above code, comment in this code)
-		//RandomAccessibleInterval<T> rai = (RandomAccessibleInterval<T>) Views
-			//	.interval(Views.extendZero(image), interval);
+	RandomAccessibleInterval<T> rai = (RandomAccessibleInterval<T>) Views
+				.interval(Views.extendZero(image), interval);
 
 		// display the image
 		ij.ui().show("RAI", rai);

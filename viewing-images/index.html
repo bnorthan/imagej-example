@@ -195,7 +195,7 @@ public void run() {
 				 </section>
 
 					<section>
-						<h3>Start IJ1, load image and blur it</h3>
+						<h3>Start IJ, load image and blur it</h3>
 						<ul>
 							<li>Use ImageJ-ops to apply Gaussian blur</li>
 							<li><a href="https://github.com/imagej/imagej-ops">Ops is an extensible library for algorithms</a></li>
@@ -473,8 +473,9 @@ ij.log().info("tLen is: "+tLen);
 					</section>
 
 					<section>
-						<h3>Crop Hyperslice</h3>
+						<h3>Crop Hyperslice (3 different ways)</h3>
 						<pre><code class="java" data-trim data-noescape contenteditable>
+RandomAccessibleInterval<T> raiVolume2 = (RandomAccessibleInterval<T>) Views.offsetInterval(image, interval); 
 // create an interval that includes all x,y and c at time point 0
 Interval interval=Intervals.createMinMax(0, 0, 0, 0, 0, xLen -
 		1, yLen - 1, cLen - 1, zLen - 1, 0);
@@ -483,7 +484,11 @@ Interval interval=Intervals.createMinMax(0, 0, 0, 0, 0, xLen -
 RandomAccessibleInterval<T> raiVolume = (RandomAccessibleInterval<T>) ij
 	.op().transform().crop(image, interval);
 
-RandomAccessibleInterval<T> raiVolume2 = (RandomAccessibleInterval<T>) Views.offsetInterval(image, interval); 
+// or use offset interval...
+RandomAccessibleInterval<T> raiVolume2 = (RandomAccessibleInterval<T>) Views.offsetInterval(image, interval);
+
+// or use hyperslice... 
+RandomAccessibleInterval<T> raiVolume3 = (RandomAccessibleInterval<T>) Views.hyperSlice(image, tIndex, 0);
 
 						</code></pre>
 					</section>
