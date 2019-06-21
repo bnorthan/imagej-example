@@ -11,6 +11,7 @@ import net.imagej.ImageJ;
 import net.imagej.ImgPlus;
 import net.imagej.axis.Axes;
 import net.imagej.axis.AxisType;
+import net.imagej.ops.Ops;
 import net.imglib2.Interval;
 import net.imglib2.RandomAccessibleInterval;
 import net.imglib2.exception.IncompatibleTypeException;
@@ -51,51 +52,50 @@ public class Ex3c_CropHyperslice {
 		int zIndex = image.dimensionIndex(Axes.Z);
 		int cIndex = image.dimensionIndex(Axes.CHANNEL);
 		int tIndex = image.dimensionIndex(Axes.TIME);
-	
+
 		long xLen = image.dimension(image.dimensionIndex(Axes.X));
 		long yLen = image.dimension(image.dimensionIndex(Axes.Y));
 		long zLen = image.dimension(image.dimensionIndex(Axes.Z));
 		long cLen = image.dimension(image.dimensionIndex(Axes.CHANNEL));
 		long tLen = image.dimension(image.dimensionIndex(Axes.TIME));
 
-		System.out.println("xIndex "+xIndex+" xLen "+xLen);
-		System.out.println("yIndex "+yIndex+" yLen "+yLen);
-		System.out.println("zIndex "+zIndex+" zLen "+zLen);
-		System.out.println("cIndex "+cIndex+" cLen "+cLen);
-		System.out.println("tIndex "+tIndex+" tLen "+tLen);
+		System.out.println("xIndex " + xIndex + " xLen " + xLen);
+		System.out.println("yIndex " + yIndex + " yLen " + yLen);
+		System.out.println("zIndex " + zIndex + " zLen " + zLen);
+		System.out.println("cIndex " + cIndex + " cLen " + cLen);
+		System.out.println("tIndex " + tIndex + " tLen " + tLen);
 
 		// create an interval that includes all x,y and c at time point 0
-		Interval interval=Intervals.createMinMax(0, 0, 0, 0, 0, xLen -
-				1, yLen - 1, cLen - 1, zLen - 1, 0);
-		
+		Interval interval = Intervals.createMinMax(0, 0, 0, 0, 0, xLen - 1, yLen -
+			1, cLen - 1, zLen - 1, 0);
+
 		// crop out the first timepoint (all x, y, z and channel at timepoint 1)
-		RandomAccessibleInterval<T> raiVolume = (RandomAccessibleInterval<T>) ij
-			.op().transform().crop(image, interval);
-	
-		// or...
-		RandomAccessibleInterval<T> raiVolume2 = (RandomAccessibleInterval<T>) Views.offsetInterval(image, interval);
-		
-		// or... 
-		RandomAccessibleInterval<T> raiVolume3 = (RandomAccessibleInterval<T>) Views.hyperSlice(image, tIndex, 0);
-		
-		System.out.println("num dimensions from offsetInterval method are "+raiVolume2.numDimensions());
-		
-		System.out.println("num dimensions from hyperslice method are "+raiVolume3.numDimensions());
-		
-		raiVolume2=Views.dropSingletonDimensions(raiVolume2);
-		
-		System.out.println("num dimensions are "+raiVolume2.numDimensions());
-		
+		RandomAccessibleInterval<T> raiOps = (RandomAccessibleInterval<T>) ij.op()
+			.transform().crop(image, interval);
+
+		// or use Views
+		RandomAccessibleInterval<T> raiViews = (RandomAccessibleInterval<T>) Views
+			.hyperSlice(image, tIndex, 0);
+
+		// or you can even use views from ops
+		RandomAccessibleInterval<T> raiViews2 = (RandomAccessibleInterval<T>) ij
+			.op().transform().hyperSliceView(image, tIndex, 0);
+		System.out.println("num dimensions from ops method are " + raiOps
+			.numDimensions());
+
+		System.out.println("num dimensions from hyperslice method are " + raiViews
+			.numDimensions());
+
 		// display the image... note that something isn't quite right
-		ij.ui().show("RAI volume", raiVolume);
+		ij.ui().show("RAI volume", raiOps);
 
 		// the cropped section is an RAI. To get it to display correctly we need to
 		// use the dtaasetservice to convert it to an ImgPlus with ocrrect axis
 		DatasetService datasetService = ij.dataset();
 		AxisType[] axisTypes = new AxisType[] { Axes.X, Axes.Y, Axes.CHANNEL,
 			Axes.Z };
-		ImgPlus imgPlusVolume = new ImgPlus(datasetService.create(raiVolume),
-			"image", axisTypes);
+		ImgPlus imgPlusVolume = new ImgPlus(datasetService.create(raiOps), "image",
+			axisTypes);
 
 		// now the viewer should display the image with correct axis
 		ij.ui().show("ImgPlus volume", imgPlusVolume);

@@ -18,6 +18,7 @@ import net.imglib2.img.Img;
 import net.imglib2.type.NativeType;
 import net.imglib2.type.numeric.RealType;
 import net.imglib2.type.numeric.real.FloatType;
+import net.imglib2.view.Views;
 
 public class Ex4b_3DProject {
 
@@ -57,8 +58,8 @@ public class Ex4b_3DProject {
 				i++;
 			}
 		}
-
-		Img<FloatType> projection = ops.create().img(new FinalDimensions(
+		
+			Img<FloatType> projection = ops.create().img(new FinalDimensions(
 			projectedDimensions), new FloatType());
 
 		UnaryComputerOp projector = Computers.unary(ops, Ops.Stats.Sum.class,

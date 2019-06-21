@@ -42,17 +42,19 @@ public class Ex1_OpenAndDisplayImages {
 		// show using imagej functions
 		ImageJFunctions.show((RandomAccessibleInterval<T>) datasetBridge
 			.getImgPlus()).setTitle("Bridge IJ2 ImageJFunctions.show");
+		
+	}
 
-		// take a look at the bit depth and data type of the image in IJ1
-		ij.log().info("IJ1 bit depth " + impBridge.getBitDepth());
-		ij.log().info("IJ1 type " + impBridge.getProcessor().getClass());
+	// take a look at the bit depth and data type of the image in IJ1
+	public static void extras(ImageJ ij, ImagePlus imp, Dataset data) {
+		ij.log().info("IJ1 bit depth " + imp.getBitDepth());
+		ij.log().info("IJ1 type " + imp.getProcessor().getClass());
 
 		// take a look at the bits per pixel and pixel type of the Dataset
-		ij.log().info("IJ2 bit depth " + datasetBridge.firstElement()
-			.getBitsPerPixel());
-		ij.log().info("IJ2 type " + datasetBridge.firstElement().getClass());
+		ij.log().info("IJ2 bit depth " + data.firstElement().getBitsPerPixel());
+		ij.log().info("IJ2 type " + data.firstElement().getClass());
 		ij.log().info("");
 
-		IJ2CourseImageUtility.displayAxisInfo(datasetBridge, ij.log());
+		IJ2CourseImageUtility.displayAxisInfo(data, ij.log());
 	}
 }

@@ -179,7 +179,7 @@ public void run() {
 					<section>
 							<img src="Command.jpg" height="400">
 						</section>
-				
+			
 			</section>	
 
 				<section data-background="http://imagej.net/_images/7/72/Imagej-25%25.png">
@@ -199,7 +199,7 @@ public void run() {
 						<ul>
 							<li>Use ImageJ-ops to apply Gaussian blur</li>
 							<li><a href="https://github.com/imagej/imagej-ops">Ops is an extensible library for algorithms</a></li>
-							<li>More on Ops soon...</li>
+							<li>More on Ops next session...</li>
 						</ul>
 						<pre><code class="java" data-trim data-noescape contenteditable>
 
@@ -304,28 +304,11 @@ plotter2.createWindow();
 			</section>
 
 				<section data-background="http://imagej.net/_images/7/72/Imagej-25%25.png">
-					<h3>Example 3 Cropping Data</h3> 
-
-				 <section>
-				 	<ul>
-						<li>Open 3D Data</li>
-						<li>Display an ROI a.k.a RAI</li>
-						<li>Draw a sphere on the data</li>
-						 <ul>
-							 <li>What happens on the RAI?</li>
-						 </ul>
-						<li>Try cropping out of bounds</li>
-						 <ul>
-							 <li>What happens?</li>
-						 </ul>
-						<li>Open ND Data</li>
-						<li>Inspect Axis Types</li>
-					</ul>
-				 </section>
+					<h3>Example 3a Viewing cropped intervals</h3> 
 
 					<section>
 						<ul>
-						<li>Display an ROI a.k.a RAI</li>
+						<li>Display a cropped interval</li>
 						<ul>
 							<li>Use ops to crop</li>
 							<li>Alternatively use Views</li>
@@ -395,6 +378,11 @@ public class DrawSphereInCenter<T extends RealType<T> & NativeType<T>>
 					<section>
 						<img src="SphereInRAI.jpg" height="500">
 					</section>
+				</section>
+
+		<section data-background="http://imagej.net/_images/7/72/Imagej-25%25.png">
+			<h3>Example 3b Out of bounds?</h3> 
+
 
 					<section>
 						<h3>What if the Interval is out of bounds</h3>
@@ -440,8 +428,10 @@ ij.ui().show("RAI", rai);
 					<section>
 						<img src="CropOutOfBounds.jpg" height="500">
 					</section>
+				</section>
 
-
+		<section data-background="http://imagej.net/_images/7/72/Imagej-25%25.png">
+			<h3>Example 3c crop hyperslice</h3> 
 
 					<section>
 						<p>Show axis info using dimension index</p>
@@ -475,21 +465,22 @@ ij.log().info("tLen is: "+tLen);
 					<section>
 						<h3>Crop Hyperslice (3 different ways)</h3>
 						<pre><code class="java" data-trim data-noescape contenteditable>
-RandomAccessibleInterval<T> raiVolume2 = (RandomAccessibleInterval<T>) Views.offsetInterval(image, interval); 
+
 // create an interval that includes all x,y and c at time point 0
 Interval interval=Intervals.createMinMax(0, 0, 0, 0, 0, xLen -
 		1, yLen - 1, cLen - 1, zLen - 1, 0);
 
 // crop out the first timepoint (all x, y, z and channel at timepoint 1)
-RandomAccessibleInterval<T> raiVolume = (RandomAccessibleInterval<T>) ij
+RandomAccessibleInterval<T> raiOps = (RandomAccessibleInterval<T>) ij
 	.op().transform().crop(image, interval);
 
-// or use offset interval...
-RandomAccessibleInterval<T> raiVolume2 = (RandomAccessibleInterval<T>) Views.offsetInterval(image, interval);
+// or... 
+RandomAccessibleInterval<T> raiViews = (RandomAccessibleInterval<T>) Views.hyperSlice(image, tIndex, 0);
 
-// or use hyperslice... 
-RandomAccessibleInterval<T> raiVolume3 = (RandomAccessibleInterval<T>) Views.hyperSlice(image, tIndex, 0);
-
+// or you can even use views from ops
+RandomAccessibleInterval<T> raiViews2 = (RandomAccessibleInterval<T>) ij
+	.op().transform().hyperSliceView(image, tIndex, 0);
+				
 						</code></pre>
 					</section>
 
@@ -507,7 +498,6 @@ ImgPlus imgPlusVolume = new ImgPlus(datasetService.create(raiVolume),
 						</code></pre>
 					</section>
 
-
 					<section>
 						<img src="HyperSlice.jpg" height="500">
 					</section>
@@ -515,13 +505,12 @@ ImgPlus imgPlusVolume = new ImgPlus(datasetService.create(raiVolume),
 			</section>
 
 				<section data-background="http://imagej.net/_images/7/72/Imagej-25%25.png">
-					<h3>Example 4 Permutions and Projections</h3>
+					<h3>Example 4a Permutions</h3>
 
 				 <section>
 				 	<ul>
 						<li>Permutation (reslice) using ImgLib2 Views</li>
 						<li>Projections using ImageJ-ops</li>
-						<li>Draw in the original.. does it appear in the reslice?</li>
 					</ul>
 				 </section>
 
@@ -530,20 +519,26 @@ ImgPlus imgPlusVolume = new ImgPlus(datasetService.create(raiVolume),
 						<ul>
 							<li>last 2 parameters are 'from' and 'to'</li>
 							<li>Switch 1 (y) and 2 (z)</li>
-							<li>Run 'Draw a Sphere' command again</li>
-
 						</ul>
 
 						<pre><code class="java" data-trim data-noescape contenteditable>
-
 IntervalView<T> raiCellXYZ = Views.permute(
 	(RandomAccessibleInterval<T>) cells, 1, 2);
 IntervalView<T> raiCell_sdXYZ = Views.permute(
 	(RandomAccessibleInterval<T>) cells_sd, 1, 2);
-
-						
 						</code></pre>
 					</section>
+
+					<section>
+						<img src="Permutations.jpg" height="400">
+					</section>
+
+				
+				</section>
+
+			<section data-background="http://imagej.net/_images/7/72/Imagej-25%25.png">
+				<h3>Example 4b Projections</h3>
+
 
 					<section>
 						<h3>Projections using ops</h3>
