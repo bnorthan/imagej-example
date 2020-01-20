@@ -60,17 +60,25 @@ public class CreateSomeOps<T extends RealType<T> & NativeType<T>> {
 		long start, finish;
 
 		start = System.nanoTime();
+		
 		Img<FloatType> imgF1 = ij.op().create().img(new FinalDimensions(100, 100),
 			new FloatType());
 		finish = System.nanoTime();
-		System.out.println("time for ij.op().create(): " + (finish - start));
+		
+		long time1=finish - start;
+		
+		System.out.println("time for ij.op().create(): " + (time1));
 
 		start = System.nanoTime();
 
 		Img<T> imgF2 = creator.calculate(new FinalDimensions(100, 100), img
 			.firstElement());
 		finish = System.nanoTime();
-		System.out.println("time for creator.calculate(): " + (finish - start));
+		
+		long time2=finish - start;
+		
+		System.out.println("time for creator.calculate(): " + (time2));
+		System.out.println("ratio: " + (time1/time2));
 
 		RandomAccessibleInterval<T> gauss = ij.op().create().kernelGauss(
 			new double[] { 3.0, 3.0 }, img.firstElement());
