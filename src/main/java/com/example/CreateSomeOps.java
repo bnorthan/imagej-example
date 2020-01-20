@@ -103,7 +103,7 @@ public class CreateSomeOps<T extends RealType<T> & NativeType<T>> {
 
 		ij.launch(args);
 
-		Dataset dataBoats = (Dataset) ij.io().open("./small_boatsf.tif");
+		Dataset dataBoats = (Dataset) ij.io().open("./small_boats.tif");
 
 		ImgPlus<T> impBoats = (ImgPlus<T>) dataBoats.getImgPlus();
 
